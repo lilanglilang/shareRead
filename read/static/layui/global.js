@@ -1,0 +1,4 @@
+laytpl.config({
+  open: '<%',
+  close: '%>'
+});

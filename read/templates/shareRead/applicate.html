@@ -1,0 +1,215 @@
+{% load cache %}
+{% cache 1800 applicate_head%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="同一本书，同一个梦与远方孩子一起读书，共同成长"/>
+    <meta content="公益，梦想，同一本书，同一个梦想，共读，远方,志愿者，贫困，西部地区" name="keywords"/>
+    <title>同一本书，同一个梦</title>
+    <link rel="icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/layui/css/global.css">
+</head>
+<body class="fly-full">
+<!--头部和提示-->
+<div class="layui-layout layui-layout-admin">
+    <!--标签头-->
+    <div class="layui-header headerFixed">
+        <div class="layui-logo">共读</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    登录
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">登录</a></dd>
+                    <dd><a href="">注册</a></dd>
+                    <dd><a href="">交流</a></dd>
+                    <dd><a href="/aboutus">我们</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    我们
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="http://mp.weixin.qq.com/s/nT5gQDlfDzFV9cbrzdCszg">计划</a></dd>
+                    <dd><a href="http://mp.weixin.qq.com/s/wqiYqlxizRKScYNCWJDQUg">详细说明</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    {% endcache %}
+    <div class="layui-container">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>与{{ studentEntry.lastName }}同学共读申请</legend>
+        </fieldset>
+        {% load cache %}
+        {% cache 1800 applicate_content%}
+        <p class="fly-case-desc" style="color: red">{{ hint }}</p>
+        <form class="layui-form" action="/applicant/applicate" method="POST">
+            {% csrf_token %}
+            <input class="layui-form-label" name="selectStudent" type="hidden" value="{{ studentEntry.id }}"/>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">姓名：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" lay-verify="required" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">年龄：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="age" lay-verify="required|number" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">学历：</label>
+                    <div class="layui-input-inline">
+                        <select name="qulification">
+                            <option value="小学" selected="">小学</option>
+                            <option value="初中">初中</option>
+                            <option value="高中">高中</option>
+                            <option value="大学">大学</option>
+                            <option value="硕士及以上">硕士及以上</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">性别：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="gender" value="男" title="男" checked="">
+                        <input type="radio" name="gender" value="女" title="女">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">所在职业：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="work" lay-verify="required" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="tel" lay-verify="required|phone" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">邮箱：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mail" lay-verify="required|email" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">微信号：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="wechat" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">经历：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="您是否有过志愿者经历？若无，请说明您对志愿者活动的认识！" class="layui-textarea"
+                              name="experience"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">计划：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="为什么您愿意参加这个活动？您每个月愿意付出多少时间陪伴孩子?您预计会达成怎样的目标？" class="layui-textarea"
+                              name="goal"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原因：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="您选择此小伙伴的原因是？可从读书爱好、生活经历等方面分析。" class="layui-textarea"
+                              name="reason"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">相处：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="您预想以什么样的心态角色或者方式和您共读的小伙伴相处呢？" class="layui-textarea"
+                              name="attitude"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">兴趣：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="您的读书爱好兴趣和读书频率是怎样的？请列举三本您最喜欢的书，并说明推荐理由。" class="layui-textarea"
+                              name="rate"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="您认为什么类的书籍适合与您共读的小伙伴？请列举三本以上书名，并说明推荐理由。" class="layui-textarea"
+                              name="suitable"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">话题：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="在共读活动中，除了分享交流读书外，您更倾向于与小伙伴交流什么样的话题？" class="layui-textarea"
+                              name="otherTopic"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">做法：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="如果您推荐的书孩子不喜欢，您会怎么做？" class="layui-textarea"
+                              name="communicationType"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">建议：</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="您对我们的共读计划有什么建议？" class="layui-textarea" name="advice"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+    layui.use('form', function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+
+        //……
+
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+        form.render();
+    });
+</script>
+</body>
+</html>
+{% endcache %}

@@ -1,0 +1,67 @@
+{% load cache %}
+{% cache 1800 applicate_success %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="同一本书，同一个梦与远方孩子一起读书，共同成长"/>
+    <meta content="公益，梦想，同一本书，同一个梦想，共读，远方,志愿者，贫困，西部地区" name="keywords"/>
+    <title>同一本书，同一个梦</title>
+    <link rel="icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/layui/css/global.css">
+</head>
+
+<body style="text-align:center;">
+<!--头部和提示-->
+<div class="layui-layout layui-layout-admin">
+    <!--标签头-->
+    <div class="layui-header headerFixed">
+        <div class="layui-logo">共读</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    登录
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">登录</a></dd>
+                    <dd><a href="">注册</a></dd>
+                    <dd><a href="">交流</a></dd>
+                    <dd><a href="/aboutus">我们</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    我们
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="http://mp.weixin.qq.com/s/nT5gQDlfDzFV9cbrzdCszg">计划</a></dd>
+                    <dd><a href="http://mp.weixin.qq.com/s/wqiYqlxizRKScYNCWJDQUg">详细说明</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<div style="margin-top:100px;"><b>申请成功</b></div>
+<div id="concenter" style="margin-top: 5px;">
+    <b>感谢您的支持!</b>
+    <b>志愿者正在审核您的信息，请加微信或者QQ：1017730430，我们将对您线上面试。</b>
+    <br>
+</div>
+<div style="margin-top: 5px;">
+    <a href="http://www.1book1dream.com/">返回首页</a>
+</div>
+<script src="/static/layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+</script>
+</body>
+</html>
+{% endcache %}

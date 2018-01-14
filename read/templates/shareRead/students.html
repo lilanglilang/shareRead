@@ -1,0 +1,105 @@
+{% load cache %}
+{% cache 1800 index_head %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="同一本书，同一个梦与远方孩子一起读书，共同成长"/>
+    <meta content="公益，梦想，同一本书，同一个梦想，共读，远方,志愿者，贫困，西部地区" name="keywords"/>
+    <title>同一本书，同一个梦</title>
+    <link rel="icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/layui/css/global.css">
+</head>
+<body class="fly-full">
+<!--头部和提示-->
+<div class="layui-layout layui-layout-admin">
+    <!--标签头-->
+    <div class="layui-header headerFixed">
+        <div class="layui-logo">共读</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    登录
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">登录</a></dd>
+                    <dd><a href="">注册</a></dd>
+                    <dd><a href="">交流</a></dd>
+                    <dd><a href="/aboutus">我们</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    我们
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="http://mp.weixin.qq.com/s/nT5gQDlfDzFV9cbrzdCszg">计划</a></dd>
+                    <dd><a href="http://mp.weixin.qq.com/s/wqiYqlxizRKScYNCWJDQUg">详细说明</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+    <!--主题提示-->
+    <div class="fly-case-header">
+        <p class="fly-case-year">2018</p>
+        <h2 class="fly-case-bannerup" style="color: white">同一本书，同一个梦</h2>
+        <h1 class="fly-case-banner" style="color: white">与远方孩子一起读书，共同成长</h1>
+    </div>
+</div>
+<!--年度-->
+<div class=class="fly-main" style="overflow: hidden;">
+    <div class="fly-tab-border fly-case-tab">
+            <span>
+                  <a href="" class="tab-this">2018年度</a>
+                  <a href="">2017年度</a>
+            </span>
+    </div>
+</div>
+{% endcache %}
+<div class="layui-container">
+    <div class="layui-layout">
+            <!--分类点击-->
+            <div class="layui-tab layui-tab-brief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this"><a href="">按学校分类</a></li>
+                    <li><a href="">按地区分类</a></li>
+                </ul>
+            </div>
+            <ul class="fly-case-list">
+                {% for student in studentList %}
+                <li data-id="123">
+                    <h2><a href="http://fly.layui.com/" target="_blank">{{ student.lastName }}同学</a></h2>
+                    <p class="fly-case-desc">出生日期：{{ student.birthday }}</p>
+                    <p class="fly-case-desc">性别：{{ student.gender }}</p>
+                    <p class="fly-case-desc">年级：{{ student.grade }}</p>
+                    <p class="linTop"></p>
+                    <p class="fly-case-desc">读书兴趣：{{ student.interest }}</p>
+                    <p class="fly-case-descReaded">读过的书：{{ student.favor }}</p>
+                    <p class="fly-case-descReadW">想读的书： {{ student.wish }}</p>
+                    <a href="/applicant?studentId={{ student.id }}" style="width: 100%"
+                       class="layui-btn layui-btn-fluid">与&nbsp;Ta&nbsp;共读</a>
+
+                </li>
+                {% empty %}
+                    <li class="fly-case-desc" style="text-align: center">占时没有小朋友</li>
+                {% endfor %}
+            </ul>
+    </div>
+</div>
+
+{% load cache %}
+{% cache 1800 index_foot %}
+<script src="/static/layui/layui.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function () {
+        var element = layui.element;
+
+    });
+</script>
+</body>
+</html>
+{% endcache %}
