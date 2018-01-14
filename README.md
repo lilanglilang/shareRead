@@ -1,7 +1,7 @@
 # shareRead
 同一本书，同一个梦想
 根据自己需要选择包
-windos下的一些包
+windows下的一些包
 aiohttp==2.3.6
 aiomysql==0.0.11
 amqp==2.2.2
