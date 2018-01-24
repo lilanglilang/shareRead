@@ -34,7 +34,9 @@ class Student(models.Model):
     status = models.IntegerField(default=0,verbose_name='0:未选择、1:待审核、2:已选择')
     def __str__(self):
         return self.lastName+self.firstName
-
+    class Meta:
+        verbose_name = '学生信息'
+        verbose_name_plural = '学生详细填写'
 class Applicant(models.Model):
     id = models.IntegerField(primary_key = True,db_column='id',default=1,verbose_name="用户id")
     name = models.CharField(max_length=32,verbose_name='姓名')
@@ -60,6 +62,9 @@ class Applicant(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = '申请者信息'
+        verbose_name_plural = '申请者详细信息'
 class StudentForm(ModelForm):
     class Meta:
         model = Student
