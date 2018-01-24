@@ -1,3 +1,2 @@
-strl="fasdf"
-if strl is not None:
-    print("hello")
+import time
+print(time.strftime('%Y-%m-%d',time.localtime(time.time())))
