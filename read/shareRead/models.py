@@ -8,13 +8,13 @@ class Admin(models.Model):
     def __str__(self):
         return self.userName
 class Student(models.Model):
-    id = models.IntegerField(primary_key = True,db_column='id',verbose_name='学生编号',default=None)
+    id = models.CharField(primary_key = True,db_column='id',max_length=32,verbose_name='学生编号',default=str(uuid.uuid1()).replace("-",""))
     number = models.CharField(max_length=32,verbose_name='编号',default=str(uuid.uuid1()).replace("-",""))
     lastName = models.CharField(max_length=16,verbose_name='姓')
     firstName = models.CharField(max_length=16,verbose_name='名')
     gender = models.CharField(max_length=4,verbose_name='性别')
     birthday = models.CharField(max_length=16,verbose_name='生日')
-    grade = models.CharField(max_length=8,verbose_name='年龄')
+    grade = models.CharField(max_length=8,verbose_name='年级')
     tel = models.CharField(max_length=16,verbose_name='电话号码')
     wechat = models.CharField(max_length=16,verbose_name='家长微信号')
     headTeacher = models.CharField(max_length=32,verbose_name='老师姓名')
