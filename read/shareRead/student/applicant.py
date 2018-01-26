@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.core.cache import cache
 from ..models import ApplicantForm
 from ..models import Student
+from ..models import Applicant
+from django.contrib.auth.decorators import login_required
 def applicant(request):
     studentId = request.GET['studentId']
     studentEntry = Student.objects.get(id=studentId)
@@ -29,3 +30,11 @@ def applicate(request):
              'studentEntry': studentEntry})
 
     return render(request,'shareRead/applicate_success.html')
+
+@login_required(login_url='/admin')
+def list(request):
+    try:
+        applicantList = Applicant.objects.all()
+        return render(request, 'shareRead/applicant_list.html',{'applicant': applicantList})
+    except:
+        request
