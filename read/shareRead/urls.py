@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^aboutus$',views.about),
     url(r'^applicant$', applicant.applicant),
     url(r'^applicant/applicate$', applicant.applicate),
+    url(r'^admin/applicant/list$', applicant.list),
 ]
