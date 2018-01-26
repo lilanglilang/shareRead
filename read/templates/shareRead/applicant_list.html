@@ -43,44 +43,37 @@
     </div>
 
 </div>
-
-<table class="table table-striped table-bordered table-hover table-condensed">
+<table class="layui-table" lay-data="{width: 1346, height:332, url:'/admin/applicant/detail', page:true, id:'idTest'}"
+       lay-filter="demo">
     <thead>
-    <tr class="info">
-        <th>编号</th>
-        <th>申请者姓名</th>
-        <th>选择小伙伴</th>
-        <th>状态</th>
-        <th>操作</th>
+    <tr>
+        <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+        <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+        <th lay-data="{field:'name', width:80}">姓名</th>
+        <th lay-data="{field:'age', width:80}">年龄</th>
+        <th lay-data="{field:'gender', width:80}">年龄</th>
+        <th lay-data="{field:'tel', width:80}">城市</th>
+        <th lay-data="{field:'wechat', width:160}">签名</th>
+        <th lay-data="{field:'mail', width:80, sort: true}">积分</th>
+        <th lay-data="{field:'qulification', width:80}">职业</th>
+        <th lay-data="{field:'work', width:135, sort: true}">财富</th>
+        <th lay-data="{field:'experience', width:80, sort: true,}">评分</th>
+        <th lay-data="{field:'experience', width:80, sort: true, }">评分</th>
+        <th lay-data="{field:'experience', width:80, sort: true, }">评分</th>
+        <th lay-data="{field:'experience', width:80, sort: true, }">评分</th>
+        <th lay-data="{field:'experience', width:80, sort: true, }">评分</th>
+        <th lay-data="{field:'experience', width:80, sort: true,}">评分</th>
+
+        <th lay-data="{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}"></th>
     </tr>
     </thead>
-    <tbody>
-    {% for applicant in applicantList %}
-    <tr>
-        <td>{{ applicant.id }}</td>
-        <td><a href="/applicant/detail?applicantId={{ applicant.id }}">{{ applicant.name }}</a></td>
-        <td><a href="/student/detail?studentId={{ applicant.selectStudent.id }}">{{ applicant.selectStudent.lastName
-            }}{{ applicant.selectStudent.firstName }}</a></td>
-        <td>
-            {% if applicant.status == 0 %}
-            待审
-            {% elif applicant.status == 1 %}
-            审核通过
-            {% elif applicant.status == 2 %}
-            审核拒绝
-            {% endif %}
-        </td>
-        <td>
-            {% if applicant.status == 0 %}
-            <a href="/applicant/adopt?applicantId={{ applicant.id }}">通过</a>
-            &nbsp;|&nbsp;
-            <a href="/applicant/reject?applicantId={{ applicant.id }}">拒绝</a>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
 </table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 <div id="footer" style="width:100%">
     <div id="footleft">
         <div id="oldnew">
@@ -102,4 +95,48 @@
         var element = layui.element;
 
     });
+    layui.use('table', function () {
+        var table = layui.table;
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function (obj) {
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.msg('ID：' + data.id + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                layer.alert('编辑行：<br>' + JSON.stringify(data))
+            }
+        });
+
+        var $ = layui.$, active = {
+            getCheckData: function () { //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+            , getCheckLength: function () { //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    , data = checkStatus.data;
+                layer.msg('选中了：' + data.length + ' 个');
+            }
+            , isAll: function () { //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选' : '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
 </script>

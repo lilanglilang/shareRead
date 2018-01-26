@@ -5,6 +5,9 @@ from ..models import ApplicantForm
 from ..models import Student
 from ..models import Applicant
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.core import serializers
+import json
 def applicant(request):
     studentId = request.GET['studentId']
     studentEntry = Student.objects.get(id=studentId)
@@ -37,4 +40,20 @@ def list(request):
         applicantList = Applicant.objects.all()
         return render(request, 'shareRead/applicant_list.html',{'applicant': applicantList})
     except:
-        request
+        pass
+@login_required(login_url='/admin')
+def detail(request):
+    try:
+        applicantList = Applicant.objects.all()
+        json_data=serializers.serialize("json",applicantList)
+        data=json.loads(json_data)
+        count=len(data)
+        Rows=[]
+        for x in  data:
+            dictdata=x['fields']
+            dictdata['id']=x['pk']
+            Rows.append(dictdata)
+        return HttpResponse(json.dumps({"code":0,"msg":"",'count':count,'data':Rows}), content_type="application/json")
+    except:
+        pass
+
