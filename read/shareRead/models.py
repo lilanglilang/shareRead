@@ -13,8 +13,8 @@ class Student(models.Model):
         (1, '审核通过'),
         (2, '审核拒绝'),
     )
-    id = models.CharField(primary_key = True,db_column='id',max_length=32,verbose_name='学生编号',default=str(uuid.uuid1()).replace("-",""))
-    number = models.CharField(max_length=32,verbose_name='编号',default=str(uuid.uuid1()).replace("-",""))
+    id = models.UUIDField(editable=False,primary_key = True,max_length=32,verbose_name='学生编号',default=uuid.uuid1)
+    number = models.UUIDField(max_length=32,verbose_name='编号',default=uuid.uuid1)
     lastName = models.CharField(max_length=16,verbose_name='姓')
     firstName = models.CharField(max_length=16,verbose_name='名')
     gender = models.CharField(max_length=4,verbose_name='性别')
@@ -48,7 +48,7 @@ class Applicant(models.Model):
         (1, '审核通过'),
         (2, '审核拒绝'),
     )
-    id = models.IntegerField(primary_key = True,db_column='id',default=1,verbose_name="用户id")
+    id = models.UUIDField(editable=False,primary_key = True,db_column='id',default=uuid.uuid1,verbose_name="用户id")
     name = models.CharField(max_length=32,verbose_name='姓名',)
     age = models.IntegerField(verbose_name='年龄')
     gender = models.CharField(max_length=4,verbose_name='性别')
