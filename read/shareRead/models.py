@@ -37,11 +37,14 @@ class Student(models.Model):
     providerTel = models.CharField(max_length=16,verbose_name='联系方式')
     remarks = models.CharField(max_length=256, blank=True,verbose_name='备注')
     status = models.IntegerField(default=0,verbose_name='审核状态',choices=TITLE_CHOICES)
+    dateUpdate=models.DateField(auto_now=True)
+    dateCreated=models.DateField(auto_now_add=True,blank=True,null=True)
     def __str__(self):
         return self.lastName+self.firstName
     class Meta:
         verbose_name = '学生信息'
         verbose_name_plural = '学生详细填写'
+        get_latest_by = "dateUpdate"
 class Applicant(models.Model):
     TITLE_CHOICES = (
         (0, '待审核'),
@@ -49,7 +52,7 @@ class Applicant(models.Model):
         (2, '审核拒绝'),
     )
     id = models.UUIDField(editable=False,primary_key = True,db_column='id',default=uuid.uuid1,verbose_name="用户id")
-    name = models.CharField(max_length=32,verbose_name='姓名',)
+    name = models.CharField(max_length=32,verbose_name='姓名')
     age = models.IntegerField(verbose_name='年龄')
     gender = models.CharField(max_length=4,verbose_name='性别')
     tel = models.CharField(max_length=16,verbose_name='电话')
@@ -67,14 +70,17 @@ class Applicant(models.Model):
     communicationType = models.CharField(max_length=512, blank=True,verbose_name='交流方式')
     advice = models.CharField(max_length=512, blank=True,verbose_name='建议')
     selectStudent = models.ForeignKey(Student,on_delete=models.DO_NOTHING)
-    status = models.IntegerField(default=0,verbose_name='审核状态',choices=TITLE_CHOICES) # 0=待审、1=审核通过、2=审核拒绝
-
+    status = models.IntegerField(default=0,verbose_name='审核状态',choices=TITLE_CHOICES)
+    dateUpdate = models.DateField(auto_now=True)
+    dateCreated = models.DateField(auto_now_add=True, null=True)
+    # 0=待审、1=审核通过、2=审核拒绝
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = '申请者信息'
         verbose_name_plural = '申请者详细信息'
+        get_latest_by = "dateUpdate"
 class StudentForm(ModelForm):
     class Meta:
         model = Student
