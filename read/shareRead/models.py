@@ -45,6 +45,7 @@ class Student(models.Model):
         verbose_name = '学生信息'
         verbose_name_plural = '学生详细填写'
         get_latest_by = "dateUpdate"
+        ordering = ['-dateUpdate']
 class Applicant(models.Model):
     TITLE_CHOICES = (
         (0, '待审核'),
@@ -81,6 +82,7 @@ class Applicant(models.Model):
         verbose_name = '申请者信息'
         verbose_name_plural = '申请者详细信息'
         get_latest_by = "dateUpdate"
+        ordering = ['-dateUpdate']
 class StudentForm(ModelForm):
     class Meta:
         model = Student
