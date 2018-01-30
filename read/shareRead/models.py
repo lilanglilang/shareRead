@@ -71,7 +71,7 @@ class Applicant(models.Model):
     otherTopic = models.CharField(max_length=512, blank=True,verbose_name='其他')
     communicationType = models.CharField(max_length=512, blank=True,verbose_name='交流方式')
     advice = models.CharField(max_length=512, blank=True,verbose_name='建议')
-    selectStudent = models.ForeignKey(Student,on_delete=models.DO_NOTHING)
+    selectStudent = models.ForeignKey(Student,on_delete=models.DO_NOTHING,verbose_name="选择学生")
     status = models.IntegerField(default=0,verbose_name='审核状态',choices=TITLE_CHOICES)
     dateUpdate = models.DateField(auto_now=True)
     dateCreated = models.DateField(auto_now_add=True, null=True)
