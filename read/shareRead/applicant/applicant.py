@@ -16,7 +16,8 @@ def applicant(request):
 @csrf_exempt
 def applicate(request):
     applicantForm = ApplicantForm(request.POST)
-    studentEntry = Student.objects.get(id=applicantForm.data['selectStudent'])
+    idstu=str(applicantForm.data['selectStudent']).replace("-","")
+    studentEntry = Student.objects.get(id=idstu)
 
     # 字段验证
     if applicantForm.is_valid():

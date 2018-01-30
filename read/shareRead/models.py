@@ -9,9 +9,9 @@ class Admin(models.Model):
         return self.userName
 class Student(models.Model):
     TITLE_CHOICES = (
-        (0, '待审核'),
-        (1, '审核通过'),
-        (2, '审核拒绝'),
+        (0, '待选择'),
+        (1, '已经选择'),
+        (2, '选择成功'),
     )
     id = models.UUIDField(editable=False,primary_key = True,max_length=32,verbose_name='学生编号',default=uuid.uuid1)
     number = models.UUIDField(max_length=32,verbose_name='编号',default=uuid.uuid1)
@@ -36,9 +36,10 @@ class Student(models.Model):
     provider = models.CharField(max_length=32,verbose_name='提供信息的公益组织')
     providerTel = models.CharField(max_length=16,verbose_name='联系方式')
     remarks = models.CharField(max_length=256, blank=True,verbose_name='备注')
-    status = models.IntegerField(default=0,verbose_name='审核状态',choices=TITLE_CHOICES)
+    status = models.IntegerField(default=0,verbose_name='选择状态',choices=TITLE_CHOICES)
     dateUpdate=models.DateField(auto_now=True)
     dateCreated=models.DateField(auto_now_add=True,blank=True,null=True)
+    deleteFlag = models.CharField(max_length=5, default=False,verbose_name="是否删除")
     def __str__(self):
         return self.lastName+self.firstName
     class Meta:
@@ -74,6 +75,7 @@ class Applicant(models.Model):
     status = models.IntegerField(default=0,verbose_name='审核状态',choices=TITLE_CHOICES)
     dateUpdate = models.DateField(auto_now=True)
     dateCreated = models.DateField(auto_now_add=True, null=True)
+    deleteFlag=models.CharField(max_length=5,default=False,verbose_name="是否删除")
     # 0=待审、1=审核通过、2=审核拒绝
     def __str__(self):
         return self.name
@@ -86,9 +88,9 @@ class Applicant(models.Model):
 class StudentForm(ModelForm):
     class Meta:
         model = Student
-        exclude = ['id', 'status']
+        exclude = ['id', 'status','deleteFlag']
 
 class ApplicantForm(ModelForm):
     class Meta:
         model = Applicant
-        exclude = ['id','status']
+        exclude = ['id','status','deleteFlag']
