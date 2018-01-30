@@ -79,6 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'shareRead',
         'USER': 'root',
+        # 'PASSWORD': 'shareread',
         'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
@@ -130,10 +131,10 @@ STATICFILES_DIRS=[
 SESSION_SAVE_EVERY_REQUEST=True#必须有这个才行
 SESSION_EXPIRE_AT_BROWSER_CLOSE=True
 
-CACHES = {
-    "default": {
-        "BACKEND": "redis_cache.cache.RedisCache",
-        "LOCATION": "localhost:6379",
-        'TIMEOUT': 60,
-    },
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "redis_cache.cache.RedisCache",
+#         "LOCATION": "localhost:6379",
+#         'TIMEOUT': 60,
+#     },
+# }
