@@ -8,3 +8,5 @@ def index(request):
     return render(request,'shareRead/students.html', {'studentList': studentList, 'size': len(studentList)})
 def about(request):
     return render(request,'shareRead/aboutus.html')
+def error(request):
+    return render(request, 'shareRead/error.html')

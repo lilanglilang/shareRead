@@ -7,6 +7,9 @@ from ..models import Applicant
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core import serializers
+from . import mail_handler
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 import json
 def applicant(request):
     studentId = request.GET['studentId']
@@ -38,14 +41,14 @@ def applicate(request):
 @login_required(login_url='/admin')
 def list(request):
     try:
-        applicantList = Applicant.objects.all()
+        applicantList = Applicant.objects.all().filter(status=0)
         return render(request, 'shareRead/applicant_list.html',{'applicant': applicantList})
     except:
         pass
 @login_required(login_url='/admin')
 def detail(request):
     try:
-        applicantList = Applicant.objects.all()
+        applicantList = Applicant.objects.all().filter(status=0)
         json_data=serializers.serialize("json",applicantList)
         data=json.loads(json_data)
         count=len(data)
@@ -58,3 +61,71 @@ def detail(request):
     except:
         pass
 
+
+# 审核通过
+@login_required(login_url='/admin')
+def adopt(request):
+    applicantId = request.GET['applicantId']
+    if applicantId is None:
+        return render("shareRead/error.html")
+    try:
+        # 修改申请者状态
+        applicantId=applicantId.replace("-","")
+        applicantEntry = Applicant.objects.get(id=applicantId)
+        applicantEntry.status = 1
+        applicantEntry.save()
+
+        # 修改学生状态为已选择
+        studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
+        studentEntry.status = 2
+        studentEntry.save()
+
+        # 发送邮件
+       # mail_handler.adoptMail(applicantEntry)
+
+        return HttpResponseRedirect('/applicant/list')
+    except BaseException as e:
+        # 修改申请者状态
+        applicantEntry = Applicant.objects.get(id=applicantId)
+        applicantEntry.status = 0
+        applicantEntry.save()
+
+        # 修改学生状态
+        studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
+        studentEntry.status = 1
+        studentEntry.save()
+        return HttpResponseRedirect('/applicant/list')
+
+
+# 审核拒绝
+@login_required(login_url='/admin')
+def reject(request):
+    applicantId = request.GET['applicantId']
+    if applicantId is None:
+        return render("shareRead/error.html")
+
+    try:
+        # 修改申请者状态
+        applicantEntry = Applicant.objects.get(id=applicantId)
+        applicantEntry.status = 2
+        applicantEntry.save()
+
+        # 修改学生状态为未选择
+        studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
+        studentEntry.status = 0
+        studentEntry.save()
+
+        # 发送邮件
+        mail_handler.rejectMail(applicantEntry)
+    except:
+        # 修改申请者状态
+        applicantEntry = Applicant.objects.get(id=applicantId)
+        applicantEntry.status = 0
+        applicantEntry.save()
+
+        # 修改学生状态
+        studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
+        studentEntry.status = 1
+        studentEntry.save()
+
+    return HttpResponseRedirect('/applicant/list')

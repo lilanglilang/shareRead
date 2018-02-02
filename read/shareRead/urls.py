@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^applicant/applicate$', applicant.applicate),
     url(r'^admin/applicant/list$', applicant.list),#获取HTML页面
     url(r'^admin/applicant/detail', applicant.detail),#返回详细列表
+    url(r'^admin/applicant/adopt$', applicant.adopt),
 ]
+handler404=views.error
