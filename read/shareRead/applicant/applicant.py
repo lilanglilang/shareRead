@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
+import json
+
+from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+
+from . import mail_handler
+from ..models import Applicant
 from ..models import ApplicantForm
 from ..models import Student
-from ..models import Applicant
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.core import serializers
-from . import mail_handler
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-import json
+
+
 def applicant(request):
     studentId = request.GET['studentId']
     studentEntry = Student.objects.get(id=studentId)
@@ -48,10 +50,18 @@ def list(request):
 @login_required(login_url='/admin')
 def detail(request):
     try:
-        applicantList = Applicant.objects.all().filter(status=0)
+        limit=request.GET['limit']
+        page=request.GET['page']
+        if not  limit or not page:
+            return render(request,"shareRead/error.html")
+        slqpage=(int(page)-1)*10
+        limit=int(limit)*int(page)
+        count=len(Applicant.objects.all())
+        applicantList = Applicant.objects.all().filter(status=0)[slqpage:limit]
+        if not applicantList:
+            return render(request,"shareRead/error.html")
         json_data=serializers.serialize("json",applicantList)
         data=json.loads(json_data)
-        count=len(data)
         Rows=[]
         for x in  data:
             dictdata=x['fields']
@@ -83,7 +93,7 @@ def adopt(request):
         # 发送邮件
        # mail_handler.adoptMail(applicantEntry)
 
-        return HttpResponseRedirect('/applicant/list')
+        return HttpResponse(json.dumps({"messsage":"审核通过"}),content_type="application/json")
     except BaseException as e:
         # 修改申请者状态
         applicantEntry = Applicant.objects.get(id=applicantId)
@@ -94,13 +104,14 @@ def adopt(request):
         studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
         studentEntry.status = 1
         studentEntry.save()
-        return HttpResponseRedirect('/applicant/list')
+        return None
 
 
 # 审核拒绝
 @login_required(login_url='/admin')
 def reject(request):
     applicantId = request.GET['applicantId']
+    applicantId = applicantId.replace("-", "")
     if applicantId is None:
         return render("shareRead/error.html")
 
@@ -128,4 +139,4 @@ def reject(request):
         studentEntry.status = 1
         studentEntry.save()
 
-    return HttpResponseRedirect('/applicant/list')
+    return HttpResponse(json.dumps({"messsage":"拒绝成功"}),content_type="application/json")
