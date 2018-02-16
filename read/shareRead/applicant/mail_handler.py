@@ -44,6 +44,7 @@ def adoptMail(applicantEntry):
         server.sendmail(username, to, msg.as_string())
         server.close()
     except Exception as e:
+
         print('Exception: send email failed:\n')
         print(e)
 

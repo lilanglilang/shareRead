@@ -11,8 +11,9 @@ from . import mail_handler
 from ..models import Applicant
 from ..models import ApplicantForm
 from ..models import Student
-
-
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 def applicant(request):
     studentId = request.GET['studentId']
     studentEntry = Student.objects.get(id=studentId)
@@ -56,8 +57,8 @@ def detail(request):
             return render(request,"shareRead/error.html")
         slqpage=(int(page)-1)*10
         limit=int(limit)*int(page)
-        count=len(Applicant.objects.all())
-        applicantList = Applicant.objects.all().filter(status=0)[slqpage:limit]
+        count=len(Applicant.objects.all().filter(status=0).filter(deleteFlag='False'))
+        applicantList = Applicant.objects.all().filter(status=0).filter(deleteFlag='False')[slqpage:limit]
         if not applicantList:
             return render(request,"shareRead/error.html")
         json_data=serializers.serialize("json",applicantList)
@@ -91,7 +92,7 @@ def adopt(request):
         studentEntry.save()
 
         # 发送邮件
-       # mail_handler.adoptMail(applicantEntry)
+        mail_handler.adoptMail(applicantEntry)
 
         return HttpResponse(json.dumps({"messsage":"审核通过"}),content_type="application/json")
     except BaseException as e:
@@ -104,7 +105,8 @@ def adopt(request):
         studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
         studentEntry.status = 1
         studentEntry.save()
-        return None
+        return HttpResponse(json.dumps({"messsage":"审核失败"}),content_type="application/json")
+
 
 
 # 审核拒绝
@@ -138,5 +140,37 @@ def reject(request):
         studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
         studentEntry.status = 1
         studentEntry.save()
+        return HttpResponse(json.dumps({"messsage":"拒绝失败"}),content_type="application/json")
 
     return HttpResponse(json.dumps({"messsage":"拒绝成功"}),content_type="application/json")
+def deleteApplicant(request):
+    applicantId = request.GET['applicantId']
+    applicantId = applicantId.replace("-", "")
+    if applicantId is None:
+        return render("shareRead/error.html")
+    try:
+        # 修改申请者状态
+        applicantEntry = Applicant.objects.get(id=applicantId)
+        applicantEntry.deleteFlag = True
+        applicantEntry.status=2
+        applicantEntry.save()
+
+        # 修改学生状态为未选择
+        studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
+        studentEntry.status = 0
+        studentEntry.save()
+
+        # 发送邮件
+        mail_handler.rejectMail(applicantEntry)
+    except BaseException as e:
+        # 修改申请者状态
+        applicantEntry = Applicant.objects.get(id=applicantId)
+        applicantEntry.status = 0
+        applicantEntry.save()
+
+        # 修改学生状态
+        studentEntry = Student.objects.get(id=applicantEntry.selectStudent.id)
+        studentEntry.status = 1
+        studentEntry.save()
+        return HttpResponse(json.dumps({"messsage":'删除失败'}), content_type="application/json")
+    return HttpResponse(json.dumps({"messsage": "删除成功"}), content_type="application/json")

@@ -136,7 +136,19 @@
                 });
             } else if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
-                    obj.del();
+                    $.ajax({
+                        type: "GET",
+                        url: "/admin/applicant/delete",
+                        data: {'applicantId': data.id},
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.messsage=='删除成功'){
+                                obj.del()
+                            }else{
+                                layer.msg('删除失败，请联系管理员');
+                            }
+                        }
+                    });
                     layer.close(index);
                 });
             } else if (obj.event === 'edit') {
