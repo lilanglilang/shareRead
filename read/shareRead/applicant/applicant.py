@@ -6,7 +6,7 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
+from django.http import HttpResponseRedirect
 from . import mail_handler
 from ..models import Applicant
 from ..models import ApplicantForm
@@ -50,6 +50,8 @@ def applicate(request):
 
 @login_required(login_url='/admin')
 def list(request):
+    if  not  request.user.is_superuser:
+        return HttpResponseRedirect('/')
     try:
         applicantList = Applicant.objects.all().filter(status=0)
         return render(request, 'shareRead/applicant_list.html', {'applicant': applicantList})
@@ -59,6 +61,8 @@ def list(request):
 
 @login_required(login_url='/admin')
 def detail(request):
+    if  not  request.user.is_superuser:
+        return HttpResponseRedirect('/')
     try:
         limit = request.GET['limit']
         page = request.GET['page']
@@ -87,6 +91,8 @@ def detail(request):
 # 审核通过
 @login_required(login_url='/admin')
 def adopt(request):
+    if  not  request.user.is_superuser:
+        return HttpResponseRedirect('/')
     applicantId = request.GET['applicantId']
     if applicantId is None:
         return render("shareRead/error.html")
@@ -122,6 +128,8 @@ def adopt(request):
 # 审核拒绝
 @login_required(login_url='/admin')
 def reject(request):
+    if  not  request.user.is_superuser:
+        return HttpResponseRedirect('/')
     applicantId = request.GET['applicantId']
     applicantId = applicantId.replace("-", "")
     if applicantId is None:
@@ -154,8 +162,10 @@ def reject(request):
 
     return HttpResponse(json.dumps({"messsage": "拒绝成功"}), content_type="application/json")
 
-
+@login_required(login_url='/admin')
 def deleteApplicant(request):
+    if  not  request.user.is_superuser:
+        return HttpResponseRedirect('/')
     applicantId = request.GET['applicantId']
     applicantId = applicantId.replace("-", "")
     if applicantId is None:
