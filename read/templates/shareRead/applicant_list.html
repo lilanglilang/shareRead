@@ -165,7 +165,11 @@
                         data: {'applicantId': data.id},
                         dataType: "json",
                         success: function (data) {
-                           layer.alert('学生信息：<br>' + JSON.stringify(data))
+                            var studentInfo="";
+                            $.each(data,function(index,obj){
+                                studentInfo+=index+":"+obj+"<hr>"
+                            })
+                           layer.alert(studentInfo)
                         }
                     });
             }

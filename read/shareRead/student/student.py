@@ -13,7 +13,20 @@ def getStudentInfo(request):
         applicantId = applicantId.replace("-", "")
         applicantEntry = Applicant.objects.get(id=applicantId)
         studentEntry=applicantEntry.selectStudent
-        return HttpResponse(json.dumps({"姓名":studentEntry.lastName+studentEntry.lastName,"爱好":studentEntry.like}), content_type="application/json")
+        jsonData={"姓名":studentEntry.lastName+studentEntry.lastName,
+                  "生日":studentEntry.birthday,
+                  "年级":studentEntry.grade,
+                  "爱好":studentEntry.like,
+                  "擅长科目":studentEntry.goodSubjects,
+                  "潜力科目":studentEntry.potentialSubjects,
+                  "读书兴趣":studentEntry.interest,
+                  "喜欢的书":studentEntry.favor,
+                  "想读的书": studentEntry.wish,
+                  "所在学校":studentEntry.school,
+                  "学校所在城市":studentEntry.schoolCity,
+                  "备注":studentEntry.remarks
+                  }
+        return HttpResponse(json.dumps(jsonData), content_type="application/json")
     except BaseException as e:
         # 修改申请者状态
         applicantEntry = Applicant.objects.get(id=applicantId)
