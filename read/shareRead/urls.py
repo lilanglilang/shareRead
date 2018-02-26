@@ -2,6 +2,7 @@
 from django.conf.urls import url
 
 from .applicant import applicant
+from  .student import student
 from . import views
 
 urlpatterns = [
@@ -14,5 +15,6 @@ urlpatterns = [
     url(r'^admin/applicant/adopt$', applicant.adopt),  # 审核成功
     url(r'^admin/applicant/reject$', applicant.reject),  # 审核拒绝
     url(r'^admin/applicant/delete', applicant.deleteApplicant),  # 删除用户
+    url(r'^admin/student/studentInfo', student.getStudentInfo),  # 删除用户
 ]
 handler404 = views.error
