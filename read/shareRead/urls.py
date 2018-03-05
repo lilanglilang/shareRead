@@ -8,6 +8,8 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^aboutus$', views.about),
+    # edited by skaudrey
+    url(r'^regDiv$', views.regDiv) , # return the studentlist grouped by city
     url(r'^applicant$', applicant.applicant),
     url(r'^applicant/applicate$', applicant.applicate),
     url(r'^admin/applicant/list$', applicant.list),  # 返回详细列表

@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="/static/layui/images/tubiao.png" type="image/x-icon"/>
     <link rel="stylesheet" href="/static/layui/css/layui.css">
     <link rel="stylesheet" href="/static/layui/css/global.css">
+    <script type="text/javascript" src="/static/jquery/jquery-2.0.3.min.js"></script>
 </head>
 <body class="fly-full">
 <!--头部和提示-->
@@ -21,14 +22,14 @@
         <div class="layui-logo">共读</div>
         <ul class="layui-nav layui-layout-right">
             <!--<li class="layui-nav-item">-->
-                <!--<a href="javascript:;">-->
-                    <!--登录-->
-                <!--</a>-->
-                <!--<dl class="layui-nav-child">-->
-                    <!--&lt;!&ndash;<dd><a href="">登录</a></dd>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<dd><a href="">注册</a></dd>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<dd><a href="">交流</a></dd>&ndash;&gt;-->
-                <!--</dl>-->
+            <!--<a href="javascript:;">-->
+            <!--登录-->
+            <!--</a>-->
+            <!--<dl class="layui-nav-child">-->
+            <!--&lt;!&ndash;<dd><a href="">登录</a></dd>&ndash;&gt;-->
+            <!--&lt;!&ndash;<dd><a href="">注册</a></dd>&ndash;&gt;-->
+            <!--&lt;!&ndash;<dd><a href="">交流</a></dd>&ndash;&gt;-->
+            <!--</dl>-->
             <!--</li>-->
             <li class="layui-nav-item">
                 <a href="javascript:;">
@@ -64,11 +65,12 @@
         <!--分类点击-->
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this"><a href="">按学校分类</a></li>
-                <li><a href="">按地区分类</a></li>
+                <li class=""><a href="">按学校分类</a></li>
+                {% csrf_token %}
+                <li><a id="regBtn"> 按地区分类</a></li>
             </ul>
         </div>
-        <ul class="fly-case-list">
+        <ul class="fly-case-list" id="contentResult">
             {% for student in studentList %}
             <li data-id="123">
                 <h2><a href="http://fly.layui.com/" target="_blank">{{ student.lastName }}同学</a></h2>
@@ -99,6 +101,31 @@
         var element = layui.element;
 
     });
+
+    $("#regBtn").on("click", function (event) {
+        var csrftoken = $("input[name='csrfmiddlewaretoken']").val()
+        str_reg = "";
+        $.ajax({
+            type: "POST",
+            url: "/regDiv",
+            headers: {'Content-Type': 'application/json', "X-CSRFToken": csrftoken},
+            success: function (result) {
+                debugger
+                //请求正确之后的操作
+                if (result == "") {
+                  layer.msg("占无分组")
+                }
+                else{
+                    $("#contentResult").empty()
+                    $("#contentResult").append(result)
+                }
+            },
+            error: function (result) {
+                //请求失败之后的操作
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

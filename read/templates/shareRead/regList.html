@@ -1,0 +1,24 @@
+{% for cities in cityList %}
+<h2 >{{ cities.schoolCity }}市</h2>
+<ul class="fly-case-list">
+    {% for student in regList %}
+    {% ifequal cities.schoolCity student.schoolCity %}
+      <li data-id="456">
+        <h2><a href="http://fly.layui.com/" target="_blank">{{ student.lastName }}同学</a></h2>
+        <p class="fly-case-desc">年龄：{%  widthratio student.birthday|slice:"4"|add:"-2018" -1 1 %}</p>
+        <p class="fly-case-desc">性别：{{ student.gender }}</p>
+        <p class="fly-case-desc">年级：{{ student.grade }}</p>
+        <p class="fly-case-desc">爱好：{{ student.like }}</p>
+        <p class="fly-case-desc">擅长科目：{{ student.goodSubjects }}</p>
+        <p class="fly-case-desc">潜力科目：{{ student.potentialSubjects }}</p>
+        <p class="linTop"></p>
+        <p class="fly-case-desc">读书兴趣：{{ student.interest }}</p>
+        <p class="fly-case-descReaded">喜欢的书：{{ student.favor }}</p>
+        <p class="fly-case-descReadW">想读的书： {{ student.wish }}</p>
+        <a href="/applicant?studentId={{ student.id }}" style="width: 100%"
+           class="layui-btn layui-btn-fluid">与&nbsp;Ta&nbsp;共读</a>
+    </li>
+{% endifequal %}
+   {% endfor %}
+</ul>
+{% endfor %}
