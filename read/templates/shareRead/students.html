@@ -65,29 +65,27 @@
         <!--分类点击-->
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class=""><a href="">按学校分类</a></li>
                 {% csrf_token %}
                 <li><a id="regBtn"> 按地区分类</a></li>
             </ul>
         </div>
         <ul class="fly-case-list" id="contentResult">
-            {% for student in studentList %}
-            <li data-id="123">
-                <h2><a href="http://fly.layui.com/" target="_blank">{{ student.lastName }}同学</a></h2>
-                <p class="fly-case-desc">出生日期：{{ student.birthday }}</p>
-                <p class="fly-case-desc">性别：{{ student.gender }}</p>
-                <p class="fly-case-desc">年级：{{ student.grade }}</p>
-                <p class="linTop"></p>
-                <p class="fly-case-desc">读书兴趣：{{ student.interest }}</p>
-                <p class="fly-case-descReaded">读过的书：{{ student.favor }}</p>
-                <p class="fly-case-descReadW">想读的书： {{ student.wish }}</p>
-                <a href="/applicant?studentId={{ student.id }}" style="width: 100%"
-                   class="layui-btn layui-btn-fluid">与&nbsp;Ta&nbsp;共读</a>
-
-            </li>
-            {% empty %}
-            <li class="fly-case-desc" style="text-align: center">占时没有小朋友</li>
-            {% endfor %}
+            <!--{% for student in studentList %}-->
+            <!--<li data-id="123">-->
+                <!--<h2><a href="http://fly.layui.com/" target="_blank">{{ student.lastName }}同学</a></h2>-->
+                <!--<p class="fly-case-desc">出生日期：{{ student.birthday }}</p>-->
+                <!--<p class="fly-case-desc">性别：{{ student.gender }}</p>-->
+                <!--<p class="fly-case-desc">年级：{{ student.grade }}</p>-->
+                <!--<p class="linTop"></p>-->
+                <!--<p class="fly-case-desc">读书兴趣：{{ student.interest }}</p>-->
+                <!--<p class="fly-case-descReaded">读过的书：{{ student.favor }}</p>-->
+                <!--<p class="fly-case-descReadW">想读的书： {{ student.wish }}</p>-->
+                <!--<a href="/applicant?studentId={{ student.id }}" style="width: 100%"-->
+                   <!--class="layui-btn layui-btn-fluid">与&nbsp;Ta&nbsp;共读</a>-->
+            <!--</li>-->
+            <!--{% empty %}-->
+            <!--<li class="fly-case-desc" style="text-align: center">占时没有小朋友</li>-->
+            <!--{% endfor %}-->
         </ul>
     </div>
 </div>
@@ -102,7 +100,7 @@
 
     });
 
-    $("#regBtn").on("click", function (event) {
+    $(function () {
         var csrftoken = $("input[name='csrfmiddlewaretoken']").val()
         str_reg = "";
         $.ajax({
@@ -124,7 +122,7 @@
                 //请求失败之后的操作
             }
         });
-    });
+    })
 
 </script>
 </body>
